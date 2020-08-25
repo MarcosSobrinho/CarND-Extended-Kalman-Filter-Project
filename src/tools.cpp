@@ -22,3 +22,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
    * Calculate a Jacobian here.
    */
 }
+
+void Tools::PolarToCartesian(VectorXd& x_) {
+
+}

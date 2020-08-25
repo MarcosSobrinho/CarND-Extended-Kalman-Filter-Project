@@ -27,6 +27,7 @@ class Tools {
    */
   Eigen::MatrixXd CalculateJacobian(const Eigen::VectorXd& x_state);
 
+  static void PolarToCartesian(Eigen::VectorXd& x_);
 };
 
 #endif  // TOOLS_H_
