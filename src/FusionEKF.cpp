@@ -23,14 +23,26 @@ FusionEKF::FusionEKF() {
   H_laser_ = MatrixXd(2, 4);
   Hj_ = MatrixXd(3, 4);
 
+  ekf_.x_ = VectorXd::Zero(4);
+  ekf_.P_ = MatrixXd::Zero(4, 4);
+
+  ekf_.F_ = MatrixXd(4,4);
+  ekf_.Q_ = MatrixXd(4,4);
+
+  ekf_.F_ << 1.0, 0.0, 1.0, 0.0,
+             0.0, 1.0, 0.0, 1.0,
+             0.0, 0.0, 1.0, 0.0,
+             0.0, 0.0, 0.0, 1.0;
+
+
   //measurement covariance matrix - laser
-  R_laser_ << 0.0225, 0,
-              0, 0.0225;
+  R_laser_ << 0.0225, 0.0,
+              0.0, 0.0225;
 
   //measurement covariance matrix - radar
-  R_radar_ << 0.09, 0, 0,
-              0, 0.0009, 0,
-              0, 0, 0.09;
+  R_radar_ << 0.09, 0.0, 0.0,
+              0.0, 0.0009, 0.0,
+              0.0, 0.0, 0.09;
 
   /**
    * TODO: Finish initializing the FusionEKF.
@@ -58,8 +70,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
     // first measurement
     cout << "EKF: " << endl;
-    ekf_.x_ = VectorXd::Zero(4);
-    ekf_.P_ = MatrixXd::Identity(4, 4);
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       // TODO: Convert radar from polar to cartesian coordinates 
@@ -73,9 +83,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
       ekf_.P_(0,0) = R_laser_(0,0);
       ekf_.P_(1,1) = R_laser_(1,1);
-      ekf_.P_(2,2) = 100.0f;
-      ekf_.P_(3,3) = 100.0f;
+      ekf_.P_(2,2) = 100.0;
+      ekf_.P_(3,3) = 100.0;
 
+      previous_timestamp_ = measurement_pack.timestamp_;
       is_initialized_ = true;
     }
 
@@ -94,6 +105,24 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    * TODO: Update the process noise covariance matrix.
    * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
    */
+
+  double noise_ax = 9;
+  double noise_ay = 9;
+
+  double dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;
+  previous_timestamp_ = measurement_pack.timestamp_;
+
+  double dt_2 = dt * dt;
+  double dt_3 = dt_2 * dt;
+  double dt_4 = dt_3 * dt;
+
+  ekf_.F_(0,2) = dt;
+  ekf_.F_(1,3) = dt;
+
+  ekf_.Q_ << dt_4*0.25*noise_ax, 0.0               , dt_3*0.5*noise_ax, 0.0,
+             0.0               , dt_4*0.25*noise_ay, 0.0              , dt_3*0.5*noise_ay,
+             dt_3*0.5*noise_ax , 0.0               , dt_2*noise_ax    , 0.0,
+             0.0               , dt_3*0.5*noise_ay , 0.0              , dt_2*noise_ay;
 
   ekf_.Predict();
 
