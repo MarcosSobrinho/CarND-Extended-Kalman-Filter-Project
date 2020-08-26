@@ -18,28 +18,30 @@ FusionEKF::FusionEKF() {
   previous_timestamp_ = 0;
 
   // initializing matrices
-  R_laser_ = MatrixXd(2, 2);
-  R_radar_ = MatrixXd(3, 3);
-  H_laser_ = MatrixXd(2, 4);
+  H_laser_ = MatrixXd::Zero(2, 4);
+  H_laser_(0,0) = 1.0;
+  H_laser_(1,1) = 1.0;
   Hj_ = MatrixXd(3, 4);
 
   ekf_.x_ = VectorXd::Zero(4);
   ekf_.P_ = MatrixXd::Zero(4, 4);
 
   ekf_.F_ = MatrixXd(4,4);
-  ekf_.Q_ = MatrixXd(4,4);
 
   ekf_.F_ << 1.0, 0.0, 1.0, 0.0,
              0.0, 1.0, 0.0, 1.0,
              0.0, 0.0, 1.0, 0.0,
              0.0, 0.0, 0.0, 1.0;
 
+  ekf_.Q_ = MatrixXd(4,4);
 
   //measurement covariance matrix - laser
+  R_laser_ = MatrixXd(2, 2);
   R_laser_ << 0.0225, 0.0,
               0.0, 0.0225;
 
   //measurement covariance matrix - radar
+  R_radar_ = MatrixXd(3, 3);
   R_radar_ << 0.09, 0.0, 0.0,
               0.0, 0.0009, 0.0,
               0.0, 0.0, 0.09;
@@ -141,7 +143,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   } else {
     // TODO: Laser updates
-
+    ekf_.Update(measurement_pack.raw_measurements_);
   }
 
   // print the output
