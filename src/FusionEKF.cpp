@@ -93,6 +93,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       ekf_.P_(1,1) = R_radar_(0,0);
       ekf_.P_(2,2) = R_radar_(2,2)*100.0;
       ekf_.P_(3,3) = R_radar_(2,2)*100.0;
+
+      previous_timestamp_ = measurement_pack.timestamp_;
+      is_initialized_ = true;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       // TODO: Initialize state.

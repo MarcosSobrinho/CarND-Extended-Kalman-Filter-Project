@@ -44,9 +44,14 @@ void KalmanFilter::UpdateEKF(const VectorXd &z, const MatrixXd& H_j, const Matri
   MatrixXd S = MatrixXd(3,3);
   MatrixXd K = MatrixXd(4,3);
 
-  y(0) -= sqrt(x_(0)*x_(0) + x_(1)*x_(1));
-  y(1) -= atan2(x_(1), x_(0));
-  y(2) -= (x_(0)*x_(2) + x_(1)*x_(3)) / y(0);
+  while (y(1) > M_PI) y(1) -= (2*M_PI);
+  while (y(1) < M_PI) y(1) += (2*M_PI);
+
+  y(0) = sqrt(x_(0)*x_(0) + x_(1)*x_(1));
+  y(1) = atan2(x_(1), x_(0));
+  y(2) = (x_(0)*x_(2) + x_(1)*x_(3)) / y(0);
+
+  y = z - y;
 
   S = H_j*P_*H_j.transpose() + R_;
   K = P_*H_j.transpose()*S.inverse();
