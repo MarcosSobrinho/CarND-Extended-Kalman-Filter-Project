@@ -34,6 +34,7 @@ FusionEKF::FusionEKF() {
              0.0, 0.0, 0.0, 1.0;
 
   ekf_.Q_ = MatrixXd(4,4);
+  ekf_.H_ = H_laser_;
 
   //measurement covariance matrix - laser
   R_laser_ = MatrixXd(2, 2);
