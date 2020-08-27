@@ -40,13 +40,13 @@ void KalmanFilter::UpdateEKF(const VectorXd &z, const MatrixXd& H_j, const Matri
   /**
    * TODO: update the state by using Extended Kalman Filter equations
    */
-  VectorXd y = VectorXd(3);
+  VectorXd y = z;
   MatrixXd S = MatrixXd(3,3);
   MatrixXd K = MatrixXd(4,3);
 
-  y(0) = z(0) - sqrt(x_(0)*x_(0) + x_(1)*x_(1));
-  y(1) = z(1) - atan(x_(1) / x_(0));
-  y(2) = z(2) - (x_(0)*x_(2) + x_(1)*x_(3)) / y(0);
+  y(0) -= sqrt(x_(0)*x_(0) + x_(1)*x_(1));
+  y(1) -= atan2(x_(1), x_(0));
+  y(2) -= (x_(0)*x_(2) + x_(1)*x_(3)) / y(0);
 
   S = H_j*P_*H_j.transpose() + R_;
   K = P_*H_j.transpose()*S.inverse();

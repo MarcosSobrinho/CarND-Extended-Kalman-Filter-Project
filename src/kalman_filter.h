@@ -26,13 +26,13 @@ class KalmanFilter {
    * Updates the state by using standard Kalman Filter equations
    * @param z The measurement at k+1
    */
-  void Update(const Eigen::VectorXd &z, const MatrixXd& H_j, const MatrixXd& R_);
+  void Update(const Eigen::VectorXd &z, const Eigen::MatrixXd& H_j, const Eigen::MatrixXd& R_);
 
   /**
    * Updates the state by using Extended Kalman Filter equations
    * @param z The measurement at k+1
    */
-  void UpdateEKF(const Eigen::VectorXd &z, const MatrixXd& H_j, const MatrixXd& R_);
+  void UpdateEKF(const Eigen::VectorXd &z, const Eigen::MatrixXd& H_j, const Eigen::MatrixXd& R_);
 
   // state vector
   Eigen::VectorXd x_;

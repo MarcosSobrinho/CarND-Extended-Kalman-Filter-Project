@@ -46,35 +46,28 @@ VectorXd Tools::CalculateRMSE(const vector<VectorXd> &estimations,
 
 }
 
-MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
+MatrixXd Tools::CalculateJacobian(const VectorXd& x_) {
   /**
    * TODO:
    * Calculate a Jacobian here.
    */
   MatrixXd Hj = MatrixXd::Zero(3,4);
-  // recover state parameters
-  double px = x_state(0);
-  double py = x_state(1);
-  double vx = x_state(2);
-  double vy = x_state(3);
-
-  // TODO: YOUR CODE HERE
 
   // check division by zero
-  if (px == 0.0f && py == 0.0f)
+  if ((x_(0) < 0.0001) && (x_(1) < 0.0001))
   {
       std::cout << "Divison by 0" << std::endl;
       return Hj;
   }
   // compute the Jacobian matrix
-  double rho_2 = px*px + py*py;
+  double rho_2 = x_(0)*x_(0) + x_(1)*x_(1);
   double rho = sqrt(rho_2);
-  double d_rho = (vx*py - vy*px) / (rho*rho_2);
-  double d_rh0 = (vy*px - vx*py) / (rho*rho_2);
+  double d_rho = (x_(2)*x_(1) - x_(3)*x_(0)) / (rho*rho_2);
+  double d_rh0 = (x_(3)*x_(0) - x_(2)*x_(1)) / (rho*rho_2);
 
-  Hj << px/rho   , py/rho   , 0.0   , 0.0   ,
-        -py/rho_2, px/rho_2 , 0.0   , 0.0   ,
-        py*d_rho , px*d_rh0 , px/rho, py/rho;
+  Hj << x_(0)/rho   , x_(1)/rho  , 0.0      , 0.0      ,
+        -x_(1)/rho_2, x_(0)/rho_2, 0.0      , 0.0      ,
+        x_(1)*d_rho , x_(0)*d_rh0, x_(0)/rho, x_(1)/rho;
 
   return Hj;
 }
