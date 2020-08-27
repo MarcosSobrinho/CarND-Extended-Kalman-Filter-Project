@@ -2,7 +2,6 @@
 #include <iostream>
 #include "Eigen/Dense"
 #include "tools.h"
-#include <cmath>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -79,9 +78,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       //         and initialize state.
       double rho = measurement_pack.raw_measurements_(0);
       double phi = measurement_pack.raw_measurements_(1);
-
-      while (phi > M_PI) phi -= (2*M_PI);
-      while (phi < M_PI) phi += (2*M_PI);
 
       ekf_.x_(0) = rho * cos(phi);
       ekf_.x_(1) = rho * sin(phi);
