@@ -61,12 +61,13 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_) {
   }
   // compute the Jacobian matrix
   double rho_2 = x_(0)*x_(0) + x_(1)*x_(1);
-  double rho   = sqrt(rho_2);
+  double rho = sqrt(rho_2);
   double d_rho = (x_(2)*x_(1) - x_(3)*x_(0)) / (rho*rho_2);
+  double d_rh0 = (x_(3)*x_(0) - x_(2)*x_(1)) / (rho*rho_2);
 
-  Hj << x_(0)/rho   , x_(1)/rho   , 0.0      , 0.0      ,
-        -x_(1)/rho_2, x_(0)/rho_2 , 0.0      , 0.0      ,
-        x_(1)*d_rho , -x_(0)*d_rho, x_(0)/rho, x_(1)/rho;
+  Hj << x_(0)/rho   , x_(1)/rho  , 0.0      , 0.0      ,
+        -x_(1)/rho_2, x_(0)/rho_2, 0.0      , 0.0      ,
+        x_(1)*d_rho , x_(0)*d_rh0, x_(0)/rho, x_(1)/rho;
 
   return Hj;
 }

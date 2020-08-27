@@ -79,20 +79,19 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       //         and initialize state.
       double rho = measurement_pack.raw_measurements_(0);
       double phi = measurement_pack.raw_measurements_(1);
-      double drh = measurement_pack.raw_measurements_(2);
 
       while (phi > M_PI) phi -= (2*M_PI);
       while (phi < M_PI) phi += (2*M_PI);
 
       ekf_.x_(0) = rho * cos(phi);
       ekf_.x_(1) = rho * sin(phi);
-      ekf_.x_(2) = drh * cos(phi);
-      ekf_.x_(0) = drh * sin(phi);
+      ekf_.x_(2) = 0.0;
+      ekf_.x_(0) = 0.0;
 
       ekf_.P_(0,0) = R_radar_(0,0);
       ekf_.P_(1,1) = R_radar_(0,0);
-      ekf_.P_(2,2) = R_radar_(2,2)*100.0;
-      ekf_.P_(3,3) = R_radar_(2,2)*100.0;
+      ekf_.P_(2,2) = 100.0;
+      ekf_.P_(3,3) = 100.0;
 
       previous_timestamp_ = measurement_pack.timestamp_;
       is_initialized_ = true;
@@ -161,7 +160,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // TODO: Radar updates
 
     Hj_ = Tools::CalculateJacobian(ekf_.x_);
-    //if (Hj_ == MatrixXd::Zero(3,4)) return;
 
     ekf_.UpdateEKF(measurement_pack.raw_measurements_, Hj_, R_radar_);
 
