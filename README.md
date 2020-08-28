@@ -9,9 +9,8 @@ The given lidar data <img src="https://render.githubusercontent.com/render/math?
 
 <img src="https://render.githubusercontent.com/render/math?math=\mathbf{d}_{Lidar}=(x, y)^{T}">
 
-$$\mathbf{d}_{Lidar}=(x, y)^{T}$$
-The radar $$\mathbf{d}_{Radar}$$ contain positional information in polar coordinates as well as the radial velocity:
-$$\mathbf{d}_{Lidar}=(\rho, \varphi, \dot{\rho})^{T}$$
+The radar data <img src="https://render.githubusercontent.com/render/math?math=\mathbf{d}_{Radar}"> contain positional information in polar coordinates as well as the radial velocity:
+<img src="https://render.githubusercontent.com/render/math?math=\mathbf{d}_{Radar} = (\rho, \varphi, \dot{\rho})^{T}">
 The provided suggestion to solve the tracking challenge was to evaluate lidar data with a Kalman Filter and the radar data with an extended Kalman Filter, since the transformation of polar to cartesian coordinates is non-linear (this will be described in the Implementation Details - Initialization section). The combination of both is referred to as Fusion EKF within this project.
 ## Implementation Details
 ### Initialization
