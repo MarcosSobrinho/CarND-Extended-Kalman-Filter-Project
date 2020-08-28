@@ -24,12 +24,6 @@ void KalmanFilter::Update(const VectorXd &z, const MatrixXd& H_l, const MatrixXd
   /**
    * TODO: update the state by using Kalman Filter equations
    */
-  /*
-  Eigen::Vector2d y;
-  Eigen::Matrix<double, 2, 2> S;
-  Eigen::Matrix<double, 4, 2> K;
-  */
-
   Eigen::Vector2d             y = z - H_l*x_;
   Eigen::Matrix<double, 2, 2> S = H_l*P_*H_l.transpose() + R_;
   Eigen::Matrix<double, 4, 2> K = P_*H_l.transpose()*S.inverse();
