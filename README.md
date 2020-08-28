@@ -1,7 +1,7 @@
 # Extended Kalman Filter Submission
 
 ## Objective
-Implement an estimator to track the state $$\mathbf{x}$$ of a driving vehicle based on lidar and radar data. State $$\mathbf{x}$$ is a vector containing 2D position and 2D velocity: 
+Implement an estimator to track the state <img src="https://render.githubusercontent.com/render/math?math=\mathbf{x}> $$\mathbf{x}$$ of a driving vehicle based on lidar and radar data. State $$\mathbf{x}$$ is a vector containing 2D position and 2D velocity: 
 $$\mathbf{x}=(x, y, v_{x}, v_{y})^{T}$$ 
 The given lidar data $$\mathbf{d}_{Lidar}$$ are estimates of position in cartesian coordinates:
 $$\mathbf{d}_{Lidar}=(x, y)^{T}$$
