@@ -1,3 +1,5 @@
+rmse_vx":0.494005775425239,"rmse_vy":0.45432141679517,"rmse_x":0.106659594245247,"rmse_y":0.0927755824818693
+
 # Extended Kalman Filter Project Starter Code
 Self-Driving Car Engineer Nanodegree Program
 

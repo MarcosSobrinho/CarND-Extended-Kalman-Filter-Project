@@ -24,35 +24,34 @@ void KalmanFilter::Update(const VectorXd &z, const MatrixXd& H_l, const MatrixXd
   /**
    * TODO: update the state by using Kalman Filter equations
    */
+  /*
   Eigen::Vector2d y;
-  MatrixXd S = MatrixXd(2,2);
-  MatrixXd K = MatrixXd(4,2);
+  Eigen::Matrix<double, 2, 2> S;
+  Eigen::Matrix<double, 4, 2> K;
+  */
 
-  y = z - H_l*x_;
-  S = H_l*P_*H_l.transpose() + R_;
-  K = P_*H_l.transpose()*S.inverse();
+  Eigen::Vector2d             y = z - H_l*x_;
+  Eigen::Matrix<double, 2, 2> S = H_l*P_*H_l.transpose() + R_;
+  Eigen::Matrix<double, 4, 2> K = P_*H_l.transpose()*S.inverse();
 
   x_ = x_ + K*y;
-  P_ = (MatrixXd::Identity(4,4) - K*H_l)*P_;
+  P_ = (Eigen::Matrix4d::Identity(4,4) - K*H_l)*P_;
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z, const MatrixXd& H_j, const MatrixXd& R_) {
   /**
    * TODO: update the state by using Extended Kalman Filter equations
    */
-  Eigen::Vector3d y;
-  Eigen::Matrix<double, 3, 3> S;
-  Eigen::Matrix<double, 4, 3> K;
+  Eigen::Vector3d y = z;
 
-  y(0) = sqrt(x_(0)*x_(0) + x_(1)*x_(1));
-  y(1) = atan2(x_(1), x_(0));
-  y(2) = (x_(0)*x_(2) + x_(1)*x_(3)) / y(0);
+  double rho = sqrt(x_(0)*x_(0) + x_(1)*x_(1));
+  y(0) -= rho;
+  y(1) -= atan2(x_(1), x_(0));
+  y(2) -= (x_(0)*x_(2) + x_(1)*x_(3)) / rho;
 
-  y = z - y;
-
-  S = H_j*P_*H_j.transpose() + R_;
-  K = P_*H_j.transpose()*S.inverse();
+  Eigen::Matrix<double, 3, 3> S = H_j*P_*H_j.transpose() + R_;
+  Eigen::Matrix<double, 4, 3> K = P_*H_j.transpose()*S.inverse();
 
   x_ = x_ + K*y;
-  P_ = (MatrixXd::Identity(4,4) - K*H_j)*P_;
+  P_ = (Eigen::Matrix4d::Identity(4,4) - K*H_j)*P_;
 }
