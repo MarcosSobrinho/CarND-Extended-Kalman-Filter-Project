@@ -24,7 +24,7 @@ void KalmanFilter::Update(const VectorXd &z, const MatrixXd& H_l, const MatrixXd
   /**
    * TODO: update the state by using Kalman Filter equations
    */
-  VectorXd y = VectorXd(2);
+  Eigen::Vector2d y;
   MatrixXd S = MatrixXd(2,2);
   MatrixXd K = MatrixXd(4,2);
 
@@ -40,9 +40,9 @@ void KalmanFilter::UpdateEKF(const VectorXd &z, const MatrixXd& H_j, const Matri
   /**
    * TODO: update the state by using Extended Kalman Filter equations
    */
-  VectorXd y = z;
-  MatrixXd S = MatrixXd(3,3);
-  MatrixXd K = MatrixXd(4,3);
+  Eigen::Vector3d y;
+  Eigen::Matrix<double, 3, 3> S;
+  Eigen::Matrix<double, 4, 3> K;
 
   y(0) = sqrt(x_(0)*x_(0) + x_(1)*x_(1));
   y(1) = atan2(x_(1), x_(0));
