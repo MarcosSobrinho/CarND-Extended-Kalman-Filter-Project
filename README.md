@@ -2,9 +2,13 @@
 
 ## Objective
 Implement an estimator to track the state <img src="https://render.githubusercontent.com/render/math?math=\mathbf{x}"> of a driving vehicle based on lidar and radar data. State <img src="https://render.githubusercontent.com/render/math?math=\mathbf{x}"> is a vector containing 2D position and 2D velocity:
+
 <img src="https://render.githubusercontent.com/render/math?math=\mathbf{x}=(x, y, v_{x}, v_{y})^{T}">
-$$\mathbf{x}=(x, y, v_{x}, v_{y})^{T}$$ 
-The given lidar data $$\mathbf{d}_{Lidar}$$ are estimates of position in cartesian coordinates:
+
+The given lidar data <img src="https://render.githubusercontent.com/render/math?math=\mathbf{d}_{Lidar}"> are estimates of position in cartesian coordinates:
+
+<img src="https://render.githubusercontent.com/render/math?math=\mathbf{d}_{Lidar}=(x, y)^{T}">
+
 $$\mathbf{d}_{Lidar}=(x, y)^{T}$$
 The radar $$\mathbf{d}_{Radar}$$ contain positional information in polar coordinates as well as the radial velocity:
 $$\mathbf{d}_{Lidar}=(\rho, \varphi, \dot{\rho})^{T}$$
